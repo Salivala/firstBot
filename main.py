@@ -17,12 +17,11 @@ else:
 subreddit = reddit.subreddit("toundrabotplayground")
 
 for submission in subreddit.hot(limit=10):
-    #print(submission.id)
-    if submission.id not in replied_posts:
-        if re.search("testing", submission.title, re.IGNORECASE):
-            submission.reply("wow good job dude!")
-            print("Boy replying to : ", submission.title)
-            replied_posts.append(submission.id)
+    comment = reddit.submission(id=submission.id)
+    for top_level in comment.comments:
+        if top_level.body == 'hello bot':
+            print("found")
+            comment.reply("heya! :p")
 
 
 with open("replied_posts.txt", "w") as f:
