@@ -3,6 +3,8 @@ import praw
 import pdb
 import re
 import os
+from FileWrapper import FileWrapper
+from bot import Bot
 
 reddit = praw.Reddit('bot1')
 
