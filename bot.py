@@ -1,7 +1,6 @@
-import sys
 import re
 import praw
-import typing
+import praw.models
 from FileWrapper import FileWrapper
 
 
@@ -16,10 +15,16 @@ class Bot:
     def __fetch_reddit(self):
         return praw.Reddit(self.bot_name)
 
-    def find_comment_by_content(self, contains):
-        for submission in self.subreddit.hot(limit=20):
-            if submission.id not in self.file.posts:
-                if re.search("testing", submission.title, re.IGNORECASE):
-                    submission.reply("wow mate")
-                    print("Bot replying")
-                    self.file.posts.append(submission.id)
+    def find_comments_by_content(self, contains: str) -> list:
+        matched_comments = []
+        for submission in self.subreddit.hot(limit=2000):
+            submission.comments.replace_more()
+            for comment in submission.comments.list():
+                if comment.id not in self.file.posts:
+                    txt = comment.body
+                    match = re.search(contains, txt)
+                    if match:
+                        self.file.posts.append(comment.id)
+                        matched_comments.append(comment)
+        self.file.write_file()
+        return matched_comments
