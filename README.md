@@ -5,3 +5,7 @@ Example
 parent : [reverse] testing
 
 reply  : gnitset
+
+
+
+Note: You will need to provide your own ini with api write access, and a site of bot1
